@@ -6,13 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
-
-import javafx.fxml.Initializable;
-//class
 import model.Book;
-
-import java.net.URL;
-import java.util.ResourceBundle;
 
 public class CardController {
 

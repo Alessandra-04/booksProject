@@ -22,9 +22,9 @@
    <top>
       <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="200.0" spacing="20.0" styleClass="white-background" stylesheets="@css/vibe.css" BorderPane.alignment="CENTER">
          <children>
-            <Label alignment="CENTER" prefHeight="48.0" prefWidth="187.0" text="Nam's Library" textFill="#3f0fb7">
+            <Label alignment="CENTER" prefHeight="48.0" prefWidth="187.0" text="Library">
                <font>
-                  <Font name="Garamond Italic" size="28.0" />
+                  <Font name="Calibri Bold" size="28.0" />
                </font>
             </Label>
             <Separator maxHeight="-Infinity" orientation="VERTICAL" prefHeight="34.0" prefWidth="5.0" />
@@ -73,10 +73,10 @@
                   </HBox>
                </children>
             </VBox>
-            <VBox prefHeight="148.0" prefWidth="230.0">
+            <VBox prefHeight="107.0" prefWidth="230.0">
                <children>
                   <Separator prefWidth="200.0" />
-                  <Label prefHeight="46.0" prefWidth="161.0" text="During reading time ">
+                  <Label prefHeight="46.0" prefWidth="161.0" text="User profile">
                      <font>
                         <Font name="Cambria Bold" size="13.0" />
                      </font>
@@ -86,19 +86,7 @@
                   </Label>
                   <HBox prefHeight="50.0" prefWidth="200.0" styleClass="mouse-moved" stylesheets="@css/vibe.css">
                      <children>
-                        <Button alignment="BASELINE_LEFT" mnemonicParsing="false" prefHeight="50.0" prefWidth="195.0" styleClass="transparent" stylesheets="@css/vibe.css" text="Stopwatch">
-                           <HBox.margin>
-                              <Insets left="40.0" />
-                           </HBox.margin>
-                           <font>
-                              <Font name="Cambria" size="13.0" />
-                           </font>
-                        </Button>
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="50.0" prefWidth="200.0" styleClass="mouse-moved" stylesheets="@css/vibe.css">
-                     <children>
-                        <Button alignment="BASELINE_LEFT" mnemonicParsing="false" prefHeight="50.0" prefWidth="195.0" styleClass="transparent" stylesheets="@css/vibe.css" text="Quotes">
+                        <Button alignment="BASELINE_LEFT" mnemonicParsing="false" prefHeight="50.0" prefWidth="195.0" styleClass="transparent" stylesheets="@css/vibe.css" text="Individual Progress">
                            <HBox.margin>
                               <Insets left="40.0" />
                            </HBox.margin>
@@ -113,7 +101,7 @@
             <Separator prefHeight="0.0" prefWidth="230.0" />
             <VBox prefHeight="99.0" prefWidth="230.0">
                <children>
-                  <Label prefHeight="46.0" prefWidth="161.0" text="After reading time">
+                  <Label prefHeight="46.0" prefWidth="161.0" text="Admin">
                      <font>
                         <Font name="Cambria Bold" size="13.0" />
                      </font>
@@ -123,7 +111,7 @@
                   </Label>
                   <HBox prefHeight="50.0" prefWidth="200.0" styleClass="mouse-moved" stylesheets="@css/vibe.css">
                      <children>
-                        <Button alignment="BASELINE_LEFT" mnemonicParsing="false" prefHeight="50.0" prefWidth="195.0" styleClass="transparent" stylesheets="@css/vibe.css" text="Journal">
+                        <Button alignment="BASELINE_LEFT" mnemonicParsing="false" prefHeight="50.0" prefWidth="195.0" styleClass="transparent" stylesheets="@css/vibe.css" text="Controller">
                            <HBox.margin>
                               <Insets left="40.0" />
                            </HBox.margin>
@@ -165,7 +153,7 @@
                <children>
                   <VBox layoutX="198.0" layoutY="114.0" prefHeight="830.0" prefWidth="974.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Label prefHeight="49.0" prefWidth="206.0" text="Recently Read">
+                        <Label prefHeight="54.0" prefWidth="281.0" text="Book Club Recently Read...">
                            <font>
                               <Font name="Cambria" size="20.0" />
                            </font>
@@ -190,6 +178,11 @@
                               <Insets bottom="10.0" left="20.0" right="20.0" top="20.0" />
                            </padding>
                         </Label>
+                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="68.0" text="Voting ">
+                           <VBox.margin>
+                              <Insets left="950.0" />
+                           </VBox.margin>
+                        </Button>
                         <Button fx:id="addBookBtn" mnemonicParsing="false" onAction="#handleAddBookButtonAction" text="Add Book">
                            <VBox.margin>
                               <Insets left="950.0" />

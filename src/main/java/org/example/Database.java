@@ -11,14 +11,14 @@ public class Database {
 
             Class.forName("com.mysql.cj.jdbc.Driver");
 
-            Connection connect = DriverManager.getConnection("jdbc:mysql://localhost/library?useSSL=false", "root", ""); // root is the default username while empty or null to the password
+            Connection connect = DriverManager.getConnection("jdbc:mysql://localhost/library?useSSL=false", "root", ""); // root is the default username
             return connect;
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
 
-        // NOW LETS OPEN OUR XAMPP : )
+
     }
 
 }
