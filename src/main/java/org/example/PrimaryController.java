@@ -1,25 +1,28 @@
 package org.example;
 
+
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Book;
-import org.controlsfx.control.PopOver;
-import javafx.scene.input.MouseEvent;
 
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class PrimaryController implements Initializable {
@@ -32,11 +35,10 @@ public class PrimaryController implements Initializable {
     private GridPane bookContainer;
 
     private List<Book> recentlyRead;
-    private List<Book> tbr;
+    public List<Book> tbr;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         recentlyRead = new ArrayList<>(recentlyRead());
         tbr = new ArrayList<>(books());
         int column = 0;
@@ -71,6 +73,26 @@ public class PrimaryController implements Initializable {
         }
     }
 
+    public void updateTbrList() throws IOException {
+        bookContainer.getChildren().removeAll();
+        int column = 0;
+        int row = 1;
+        for (Book book : tbr) {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("book.fxml"));
+            VBox bookBox = fxmlLoader.load();
+            BookRController bookRController = fxmlLoader.getController();
+            bookRController.setData(book);
+
+            if (column == 6) {
+                column = 0;
+                ++row;
+            }
+
+            bookContainer.add(bookBox, column++, row);
+            GridPane.setMargin(bookBox, new Insets(10));
+        }
+    }
 
     private List<Book> recentlyRead() {
         List<Book> ls = new ArrayList<>();
@@ -118,78 +140,65 @@ public class PrimaryController implements Initializable {
         return ls;
     }
 
-    @FXML
-    public void handleAddBookButtonAction(javafx.event.ActionEvent actionEvent) throws IOException {
-        // Load the FXML file for the add book window
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("addBook.fxml"));
-        Parent root = loader.load();
+    public void handleAddBookButtonAction(ActionEvent actionEvent) throws IOException {
+       addNewBook();
+       updateTbrList();
 
-        // Get the controller for the add book window
-        AddBookController addBookController = loader.getController();
+    }
+    public void addNewBook(){
+        Dialog<Book> dialog = new Dialog<>();
+        dialog.initModality(Modality.NONE);
+        Stage stage = (Stage) bookContainer.getScene().getWindow();
+        dialog.initOwner(stage);
 
-        // Wait for the user to enter book information and click "Add"
-        Stage addBookStage = new Stage();
-        addBookStage.setScene(new Scene(root));
-        addBookStage.showAndWait();
+        //start making the stuff in the dialog
+        dialog.setTitle("Add a new book");
+        DialogPane dialogPane = dialog.getDialogPane();
+        dialogPane.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
-        // Add the new book to the list of TBR books
-        if (addBookController.isAddButtonClicked()) {
-            Book book = new Book();
-            book.setName(addBookController.getNameField().getText());
-            book.setImageSrc(addBookController.getImageField().getText());
-            book.setAuthor(addBookController.getAuthorField().getText());
-            tbr.add(book);
+        Label nameLabel = new Label("Name:");
+        TextField name = new TextField("");
+        Label authorLabel = new Label("Author:");
+        TextField author = new TextField("");
+        Label pagesLabel = new Label("Pages:");
+        TextField pages = new TextField("");
+        Label synopsisLabel = new Label("Synopsis:");
+        TextField synopsis = new TextField("");
 
-            // Add the new book to the TBR grid in its card layout
-            try {
-                FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("book.fxml"));
-                VBox bookBox = fxmlLoader.load();
-                BookRController bookRController = fxmlLoader.getController();
-                bookRController.setData(book);
 
-                int column = (tbr.size() - 1) % 6;
-                int row = (tbr.size() - 1) / 6 + 1;
+        //add all the labels and text fields etc...
+        dialogPane.setContent(new VBox(nameLabel, name,authorLabel,author, pagesLabel,pages, synopsisLabel, synopsis));
+        //make an ok button
+        final Button btOk = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+        //Create what you want it to do when you click the button
+        btOk.addEventFilter(
+                ActionEvent.ACTION,
+                event -> {
+                    if( !name.getText().equals("")||!author.getText().equals(""))// if all your fields and things ARENT EMPTY
+                    {
+                        Book book = new Book();
+                        book.setName(name.getText());
+                        book.setImageSrc("@../../../../img/tbr/tbr3.jpg");
+                        book.setAuthor(author.getText());
+                        tbr.add(book);
 
-                bookContainer.add(bookBox, column, row);
-                GridPane.setMargin(bookBox, new Insets(10));
 
-                // Add the popover to show full book information on hover
-                PopOver popOver = new PopOver();
-                FXMLLoader popOverLoader = new FXMLLoader();
-                popOverLoader.setLocation(getClass().getResource("bookDetails.fxml"));
-                HBox detailsBox = popOverLoader.load();
-                BookDetailsController bookDetailsController = popOverLoader.getController();
-                bookDetailsController.setData(book);
-                popOver.setContentNode(detailsBox);
-                popOver.setArrowLocation(PopOver.ArrowLocation.TOP_CENTER);
-                popOver.setDetachable(false);
-                popOver.setAutoHide(true);
-                popOver.setAutoFix(true);
-                popOver.setHideOnEscape(true);
-
-                bookBox.setOnMouseClicked(event -> {
-                    if (event.getClickCount() == 2) {
-                        // Open the book details popover when the book box is double-clicked
-                        popOver.show(bookBox);
+                        //read them all text fields and make a new object. Add it to your list of objects for the courses.
+                    }else{ //else if some text field is empty or incorrect. give them an error mesdage
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Incorrect input");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Make sure everything is filled in correctly.");
+                        alert.showAndWait();
+                        event.consume(); //consume the ok button event so it doesn't close the dialog.
                     }
                 });
-
-                bookBox.setOnMouseEntered(event -> {
-                    // Show the book details popover when the mouse enters the book box
-                    popOver.show(bookBox);
-                });
-
-                bookBox.setOnMouseExited(event -> {
-                    // Hide the book details popover when the mouse exits the book box
-                    popOver.hide();
-                });
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        Optional<Book> optionalResult = dialog.showAndWait(); //show the dialog.
     }
+
+
+
+
 }
 
 

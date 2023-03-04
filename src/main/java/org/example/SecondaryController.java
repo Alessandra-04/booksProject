@@ -104,22 +104,13 @@ public class SecondaryController implements Initializable {
                     sILoginBtn.getScene().getWindow().hide();
 
                     // LINK YOUR DASHBOARD FORM
-                    Parent root = null;
-                    try {
-                        FXMLLoader loader = new FXMLLoader();
-                        loader.setLocation(getClass().getResource("C:\\Users\\aless\\IdeaProjects\\booksProject\\src\\main\\resources\\org\\example\\primary.fxml"));
-                        root = loader.load();
-                    } catch (IOException e) {
-                        // Handle the exception
-                        e.printStackTrace();
-                    }
+                    Parent root = FXMLLoader.load(getClass().getResource("primary.fxml"));
 
                     Stage stage = new Stage();
                     Scene scene = new Scene(root);
 
                     stage.setScene(scene);
                     stage.show();
-
 
                 } else {
                     alert = new Alert(Alert.AlertType.ERROR);

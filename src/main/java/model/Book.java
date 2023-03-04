@@ -19,8 +19,7 @@ public class Book {
     }
 
     public void setImageSrc(String imageSrc) {
-
-        this.imageSrc = "C:\\Users\\aless\\IdeaProjects\\booksProject\\src\\main\\resources\\img" + imageSrc;
+        this.imageSrc = imageSrc;
     }
 
     public String getAuthor() {
@@ -31,16 +30,4 @@ public class Book {
         this.author = author;
     }
 
-
-    public String getRecommendedBy() {
-        return null;
-    }
-
-    public String getSynopsis() {
-        return null;
-    }
-
-    public int getPages() {
-        return 0;
-    }
 }
