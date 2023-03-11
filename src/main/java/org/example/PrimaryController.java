@@ -1,6 +1,8 @@
 package org.example;
 
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,6 +25,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -92,6 +95,7 @@ public class PrimaryController implements Initializable {
     @FXML
     private ComboBox<?> selectBookCR;
 
+
     @FXML
     private ComboBox<?> selectMemberCR;
 
@@ -124,10 +128,6 @@ public class PrimaryController implements Initializable {
 
     @FXML
     private BorderPane main_form;
-
-
-
-
 
 
     private List<Book> recentlyRead;
@@ -168,6 +168,8 @@ public class PrimaryController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
     }
 
     public void updateTbrList() throws IOException {
@@ -325,6 +327,7 @@ public class PrimaryController implements Initializable {
         Optional<Book> optionalResult = dialog.showAndWait(); //show the dialog.
     }
 
+
     public void switchForm(ActionEvent event) {
 
         if (event.getSource() == rRTBR_btn) {
@@ -334,12 +337,12 @@ public class PrimaryController implements Initializable {
             reviewsForm.setVisible(false);
 
 
-
         } else if (event.getSource() == currentlyR_btn) {
 
             recentlyReadTBRForm.setVisible(false);
             currentlyReadingForm.setVisible(true);
             reviewsForm.setVisible(false);
+
 
             // TO UPDATE WHEN YOU CLICK THE MENU BUTTON LIKE COACHES BUTTON
 
@@ -405,7 +408,35 @@ public class PrimaryController implements Initializable {
         }
 
     }
+
+    public void populateBookComboBox(ActionEvent actionEvent) {
+        Connection connection = null;
+        try {
+            connection = Database.connectDb();
+            String sql = "SELECT name FROM books";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet result = statement.executeQuery();
+            ObservableList<String> bookNames = FXCollections.observableArrayList();
+            while (result.next()) {
+                bookNames.add(result.getObject("name").toString());
+            }
+            selectBookCR.setItems(bookNames);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
+
+
 
 
 

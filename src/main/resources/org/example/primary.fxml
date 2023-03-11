@@ -161,7 +161,7 @@
                   </AnchorPane>
                   <AnchorPane layoutX="621.0" layoutY="20.0" prefHeight="215.0" prefWidth="429.0">
                      <children>
-                        <ComboBox fx:id="selectBookCR" layoutX="140.0" layoutY="103.0" prefWidth="150.0" />
+                        <ComboBox fx:id="selectBookCR" layoutX="140.0" layoutY="103.0" onAction="#populateBookComboBox" prefWidth="150.0" />
                         <Label layoutX="96.0" layoutY="107.0" text="Book" />
                         <Label layoutX="73.0" layoutY="65.0" text="Select Book to open members reading history">
                            <font>
@@ -193,7 +193,7 @@
                   <Separator layoutX="606.0" layoutY="46.0" orientation="VERTICAL" prefHeight="757.0" prefWidth="0.0" />
                   <Separator layoutX="619.0" layoutY="242.0" prefHeight="0.0" prefWidth="433.0" />
                </children></AnchorPane>
-            <AnchorPane fx:id="recentlyReadTBRForm" layoutX="183.0" layoutY="77.0" prefHeight="830.0" prefWidth="1085.3333333333333" style="-fx-background-color: FAF9F6;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <AnchorPane fx:id="recentlyReadTBRForm" layoutX="183.0" layoutY="77.0" prefHeight="830.0" prefWidth="1085.3333333333333" style="-fx-background-color: FAF9F6;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <VBox layoutX="198.0" layoutY="114.0" prefHeight="830.0" prefWidth="974.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
