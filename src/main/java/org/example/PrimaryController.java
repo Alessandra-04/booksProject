@@ -9,16 +9,21 @@ import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import model.Book;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,15 +32,107 @@ import java.util.ResourceBundle;
 
 public class PrimaryController implements Initializable {
 
+
     public Button addBookBtn;
+
+
+    // menu buttons
+
+    public Button reviews_btn;
+
+    public Button rRTBR_btn;
+
+    public Button currentlyR_btn;
+
+    // layouts
+
     @FXML
     private HBox readBooksLayout;
 
     @FXML
     private GridPane bookContainer;
 
+
+    // currently reading Buttons
+
+    @FXML
+    private Button addBtnCR;
+
+    @FXML
+    private Button deleteBtnCR;
+
+    @FXML
+    private Button updateBtnCR;
+
+
+    // progress table
+
+    @FXML
+    private TableColumn<?, ?> colBookCR;
+
+    @FXML
+    private TableColumn<?, ?> colEndDateCR;
+
+    @FXML
+    private TableColumn<?, ?> colMemberCR;
+
+    @FXML
+    private TableColumn<?, ?> colProgressBarCR;
+
+    @FXML
+    private TableColumn<?, ?> colStartDateCR;
+
+    @FXML
+    private TableView<?> tableViewCR;
+
+
+    // data for table
+
+
+    @FXML
+    private ComboBox<?> selectBookCR;
+
+    @FXML
+    private ComboBox<?> selectMemberCR;
+
+    @FXML
+    private DatePicker startDateCR;
+
+    @FXML
+    private TextField pageNumCR;
+
+    @FXML
+    private TextField totalPagesCR;
+
+
+    // menu
+
+    @FXML
+    private AnchorPane currentlyReadingForm;
+
+    @FXML
+    private AnchorPane recentlyReadTBRForm;
+
+    @FXML
+    public AnchorPane reviewsForm;
+
+
+    // others
+
+    @FXML
+    private Button logout;
+
+    @FXML
+    private BorderPane main_form;
+
+
+
+
+
+
     private List<Book> recentlyRead;
     public List<Book> tbr;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -141,11 +238,12 @@ public class PrimaryController implements Initializable {
     }
 
     public void handleAddBookButtonAction(ActionEvent actionEvent) throws IOException {
-       addNewBook();
-       updateTbrList();
+        addNewBook();
+        updateTbrList();
 
     }
-    public void addNewBook(){
+
+    public void addNewBook() {
         Dialog<Book> dialog = new Dialog<>();
         dialog.initModality(Modality.NONE);
         Stage stage = (Stage) bookContainer.getScene().getWindow();
@@ -160,45 +258,153 @@ public class PrimaryController implements Initializable {
         TextField name = new TextField("");
         Label authorLabel = new Label("Author:");
         TextField author = new TextField("");
-        Label pagesLabel = new Label("Pages:");
-        TextField pages = new TextField("");
-        Label synopsisLabel = new Label("Synopsis:");
-        TextField synopsis = new TextField("");
+        Label imageSrcLabel = new Label("Image Source:");
+        TextField imageSrc = new TextField();
+        Button imageButton = new Button("Select Image");
 
+        // set an action for the image button
+        imageButton.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open Image");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
+            File selectedFile = fileChooser.showOpenDialog(stage);
+            if (selectedFile != null) {
+                String imagePath = selectedFile.toURI().toString();
+                imageSrc.setText(imagePath);
+            }
+        });
 
         //add all the labels and text fields etc...
-        dialogPane.setContent(new VBox(nameLabel, name,authorLabel,author, pagesLabel,pages, synopsisLabel, synopsis));
+        dialogPane.setContent(new VBox(nameLabel, name, authorLabel, author, imageSrcLabel, new HBox(imageSrc, imageButton)));
+
         //make an ok button
         final Button btOk = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+
         //Create what you want it to do when you click the button
-        btOk.addEventFilter(
-                ActionEvent.ACTION,
-                event -> {
-                    if( !name.getText().equals("")||!author.getText().equals(""))// if all your fields and things ARENT EMPTY
-                    {
-                        Book book = new Book();
-                        book.setName(name.getText());
-                        book.setImageSrc("@../../../../img/tbr/tbr3.jpg");
-                        book.setAuthor(author.getText());
-                        tbr.add(book);
+        btOk.addEventFilter(ActionEvent.ACTION, event -> {
+            if (!name.getText().isEmpty() && !author.getText().isEmpty() && !imageSrc.getText().isEmpty()) {
+                Book book = new Book();
+                book.setName(name.getText());
+                book.setAuthor(author.getText());
+                book.setImageSrc(imageSrc.getText());
+                tbr.add(book);
 
-
-                        //read them all text fields and make a new object. Add it to your list of objects for the courses.
-                    }else{ //else if some text field is empty or incorrect. give them an error mesdage
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Incorrect input");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Make sure everything is filled in correctly.");
-                        alert.showAndWait();
-                        event.consume(); //consume the ok button event so it doesn't close the dialog.
+                // Insert the new book data into the MySQL database
+                Connection connection = Database.connectDb();
+                try {
+                    String sql = "INSERT INTO books (name, author, image_src) VALUES (?, ?, ?)";
+                    PreparedStatement statement = connection.prepareStatement(sql);
+                    statement.setString(1, book.getName());
+                    statement.setString(2, book.getAuthor());
+                    statement.setString(3, book.getImageSrc());
+                    int rowsInserted = statement.executeUpdate();
+                    if (rowsInserted > 0) {
+                        System.out.println("New book inserted successfully.");
                     }
-                });
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        connection.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                // else if some text field is empty or incorrect. give them an error message
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Incorrect input");
+                alert.setHeaderText(null);
+                alert.setContentText("Make sure everything is filled in correctly.");
+                alert.showAndWait();
+                event.consume(); //consume the ok button event so it doesn't close the dialog.
+            }
+        });
+
         Optional<Book> optionalResult = dialog.showAndWait(); //show the dialog.
     }
 
+    public void switchForm(ActionEvent event) {
+
+        if (event.getSource() == rRTBR_btn) {
+
+            recentlyReadTBRForm.setVisible(true);
+            currentlyReadingForm.setVisible(false);
+            reviewsForm.setVisible(false);
 
 
 
+        } else if (event.getSource() == currentlyR_btn) {
+
+            recentlyReadTBRForm.setVisible(false);
+            currentlyReadingForm.setVisible(true);
+            reviewsForm.setVisible(false);
+
+            // TO UPDATE WHEN YOU CLICK THE MENU BUTTON LIKE COACHES BUTTON
+
+
+        } else if (event.getSource() == reviews_btn) {
+
+            recentlyReadTBRForm.setVisible(false);
+            currentlyReadingForm.setVisible(false);
+            reviewsForm.setVisible(true);
+
+        }
+    }
+
+
+    private double x = 0;
+    private double y = 0;
+
+    public void logout() {
+
+        try {
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation Message");
+            alert.setHeaderText(null);
+            alert.setContentText("Are you sure you want to logout?");
+            Optional<ButtonType> option = alert.showAndWait();
+
+            if (option.get().equals(ButtonType.OK)) {
+
+                // TO HIDE YOUR DASHBOARD FORM
+                logout.getScene().getWindow().hide();
+
+                // LINK YOUR LOGIN FORM
+                Parent root = FXMLLoader.load(getClass().getResource("secondary.fxml"));
+
+                Stage stage = new Stage();
+                Scene scene = new Scene(root);
+
+                root.setOnMousePressed((MouseEvent event) -> {
+                    x = event.getSceneX();
+                    y = event.getSceneY();
+                });
+
+                root.setOnMouseDragged((MouseEvent event) -> {
+                    stage.setX(event.getScreenX() - x);
+                    stage.setY(event.getScreenY() - y);
+
+                    stage.setOpacity(.8);
+                });
+
+                root.setOnMouseReleased((MouseEvent event) -> {
+                    stage.setOpacity(1);
+                });
+
+
+                stage.setScene(scene);
+                stage.show();
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 }
 
 

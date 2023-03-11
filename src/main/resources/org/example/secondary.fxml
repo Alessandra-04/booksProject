@@ -17,7 +17,7 @@
                   <Label layoutX="129.0" layoutY="85.0" text="Sign Up" />
                   <TextField fx:id="suUsername" layoutX="40.0" layoutY="160.0" onAction="#signup" prefHeight="35.0" prefWidth="220.0" promptText="Username" />
                   <PasswordField fx:id="suPassword" layoutX="40.0" layoutY="201.0" onAction="#signup" prefHeight="35.0" prefWidth="220.0" promptText="Password" />
-                  <Button fx:id="suSignUpBtn" layoutX="40.0" layoutY="243.0" mnemonicParsing="false" onAction="#signup" prefHeight="40.0" prefWidth="220.0" text="Sign Up" />
+                  <Button fx:id="suSignUpBtn" layoutX="40.0" layoutY="243.0" mnemonicParsing="false" onAction="#signup" prefHeight="40.0" prefWidth="220.0" text="Sign Up" wrapText="true" />
                   <TextField fx:id="suEmail" layoutX="40.0" layoutY="118.0" onAction="#signup" prefHeight="35.0" prefWidth="220.0" promptText="Email Address" />
                </children>
             </AnchorPane>

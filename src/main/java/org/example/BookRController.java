@@ -19,6 +19,7 @@ public class BookRController {
     @FXML
     private Label bookName;
 
+
     public void setData(Book book){
         Image image = new Image(getClass().getResourceAsStream(book.getImageSrc()));
         bookImage.setImage(image);
@@ -30,4 +31,5 @@ public class BookRController {
     public void handleMouseEntered(MouseEvent mouseEvent) {
         System.out.println("mouse entered book");
     }
+
 }

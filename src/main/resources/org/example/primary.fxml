@@ -3,14 +3,16 @@
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
@@ -18,7 +20,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="890.0" prefWidth="1315.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.PrimaryController">
+<BorderPane fx:id="main_form" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="890.0" prefWidth="1315.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.PrimaryController">
    <top>
       <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="200.0" spacing="20.0" styleClass="white-background" stylesheets="@css/vibe.css" BorderPane.alignment="CENTER">
          <children>
@@ -28,12 +30,6 @@
                </font>
             </Label>
             <Separator maxHeight="-Infinity" orientation="VERTICAL" prefHeight="34.0" prefWidth="5.0" />
-            <HBox alignment="CENTER" maxHeight="-Infinity" prefHeight="35.0" prefWidth="290.0" styleClass="round-layout" stylesheets="@css/vibe.css">
-               <children>
-                  <TextField prefHeight="25.0" prefWidth="239.0" promptText="Search" styleClass="transparent" stylesheets="@css/vibe.css" />
-                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
-               </children>
-            </HBox>
             <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
             <HBox alignment="CENTER" prefHeight="60.0" prefWidth="231.0" />
          </children>
@@ -47,7 +43,7 @@
          <children>
             <VBox layoutX="10.0" layoutY="161.0" prefHeight="103.0" prefWidth="230.0">
                <children>
-                  <Label prefHeight="46.0" prefWidth="161.0" text="Shelf">
+                  <Label prefHeight="46.0" prefWidth="161.0" text="Book Club´s Shelf">
                      <font>
                         <Font name="Cambria Bold" size="13.0" />
                      </font>
@@ -61,7 +57,19 @@
                         <String fx:value="selected" />
                      </styleClass>
                      <children>
-                        <Button alignment="BASELINE_LEFT" mnemonicParsing="false" prefHeight="50.0" prefWidth="195.0" styleClass="transparent" stylesheets="@css/vibe.css" text="The Shelf">
+                        <Button fx:id="rRTBR_btn" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="50.0" prefWidth="195.0" styleClass="transparent" stylesheets="@css/vibe.css" text="Recently Read &amp; TBR">
+                           <HBox.margin>
+                              <Insets left="40.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font name="Cambria" size="13.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="50.0" prefWidth="200.0" styleClass="mouse-moved" stylesheets="@css/vibe.css">
+                     <children>
+                        <Button fx:id="currentlyR_btn" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="50.0" prefWidth="190.0" styleClass="transparent" stylesheets="@css/vibe.css" text="Currently Reading">
                            <HBox.margin>
                               <Insets left="40.0" />
                            </HBox.margin>
@@ -73,10 +81,10 @@
                   </HBox>
                </children>
             </VBox>
-            <VBox prefHeight="107.0" prefWidth="230.0">
+            <VBox prefHeight="89.0" prefWidth="230.0">
                <children>
                   <Separator prefWidth="200.0" />
-                  <Label prefHeight="46.0" prefWidth="161.0" text="User profile">
+                  <Label prefHeight="35.0" prefWidth="161.0" text="Interact">
                      <font>
                         <Font name="Cambria Bold" size="13.0" />
                      </font>
@@ -84,9 +92,9 @@
                         <Insets left="10.0" />
                      </VBox.margin>
                   </Label>
-                  <HBox prefHeight="50.0" prefWidth="200.0" styleClass="mouse-moved" stylesheets="@css/vibe.css">
+                  <HBox prefHeight="37.0" prefWidth="230.0" styleClass="mouse-moved" stylesheets="@css/vibe.css">
                      <children>
-                        <Button alignment="BASELINE_LEFT" mnemonicParsing="false" prefHeight="50.0" prefWidth="195.0" styleClass="transparent" stylesheets="@css/vibe.css" text="Individual Progress">
+                        <Button fx:id="reviews_btn" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchForm" prefHeight="37.0" prefWidth="190.0" styleClass="transparent" stylesheets="@css/vibe.css" text="Reviews">
                            <HBox.margin>
                               <Insets left="40.0" />
                            </HBox.margin>
@@ -99,9 +107,9 @@
                </children>
             </VBox>
             <Separator prefHeight="0.0" prefWidth="230.0" />
-            <VBox prefHeight="99.0" prefWidth="230.0">
+            <VBox prefHeight="80.0" prefWidth="230.0">
                <children>
-                  <Label prefHeight="46.0" prefWidth="161.0" text="Admin">
+                  <Label prefHeight="35.0" prefWidth="161.0" text="Admin">
                      <font>
                         <Font name="Cambria Bold" size="13.0" />
                      </font>
@@ -109,9 +117,9 @@
                         <Insets left="10.0" />
                      </VBox.margin>
                   </Label>
-                  <HBox prefHeight="50.0" prefWidth="200.0" styleClass="mouse-moved" stylesheets="@css/vibe.css">
+                  <HBox prefHeight="37.0" prefWidth="230.0" styleClass="mouse-moved" stylesheets="@css/vibe.css">
                      <children>
-                        <Button alignment="BASELINE_LEFT" mnemonicParsing="false" prefHeight="50.0" prefWidth="195.0" styleClass="transparent" stylesheets="@css/vibe.css" text="Controller">
+                        <Button alignment="BASELINE_LEFT" mnemonicParsing="false" prefHeight="37.0" prefWidth="190.0" styleClass="transparent" stylesheets="@css/vibe.css" text="Controller">
                            <HBox.margin>
                               <Insets left="40.0" />
                            </HBox.margin>
@@ -124,6 +132,7 @@
                </children>
             </VBox>
             <Separator prefWidth="200.0" />
+            <Button fx:id="logout" mnemonicParsing="false" onAction="#logout" text="Log out" />
          </children>
          <padding>
             <Insets top="20.0" />
@@ -133,23 +142,58 @@
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="850.0" prefWidth="1105.3333333333333" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="850.0" prefWidth="1105.3333333333333" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <AnchorPane fx:id="reviewsForm" layoutX="10.0" layoutY="10.0" prefHeight="840.0" prefWidth="1095.3333333333333" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <AnchorPane fx:id="currentlyReadingForm" prefHeight="830.0" prefWidth="1085.3333333333333" style="-fx-background-color: FAF9F6;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <GridPane layoutX="188.0" layoutY="236.0" prefHeight="830.0" prefWidth="1085.3333333333333" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                  </GridPane>
+                  <AnchorPane layoutX="22.0" layoutY="20.0" prefHeight="789.0" prefWidth="571.0">
+                     <children>
+                        <TableView fx:id="tableViewCR" layoutX="17.0" layoutY="23.0" prefHeight="744.0" prefWidth="538.0">
+                          <columns>
+                            <TableColumn fx:id="colBookCR" prefWidth="75.33331298828125" text="Book" />
+                            <TableColumn fx:id="colMemberCR" prefWidth="120.66665649414062" text="Member" />
+                              <TableColumn fx:id="colStartDateCR" text="Start Date" />
+                              <TableColumn fx:id="colProgressBarCR" prefWidth="182.66668701171875" text="Progress Bar" />
+                              <TableColumn fx:id="colEndDateCR" minWidth="1.33331298828125" prefWidth="80.66668701171875" text="End Date" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutX="621.0" layoutY="20.0" prefHeight="215.0" prefWidth="429.0">
+                     <children>
+                        <ComboBox fx:id="selectBookCR" layoutX="140.0" layoutY="103.0" prefWidth="150.0" />
+                        <Label layoutX="96.0" layoutY="107.0" text="Book" />
+                        <Label layoutX="73.0" layoutY="65.0" text="Select Book to open members reading history">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutX="621.0" layoutY="250.0" prefHeight="558.0" prefWidth="429.0">
+                     <children>
+                        <DatePicker fx:id="startDateCR" layoutX="139.0" layoutY="198.0" prefHeight="25.0" prefWidth="151.0" />
+                        <TextField fx:id="pageNumCR" layoutX="203.0" layoutY="266.0" prefHeight="25.0" prefWidth="73.0" stylesheets="@css/vibe.css" />
+                        <TextField fx:id="totalPagesCR" layoutX="205.0" layoutY="331.0" prefHeight="25.0" prefWidth="73.0" stylesheets="@css/vibe.css" />
+                        <Label layoutX="75.0" layoutY="126.0" text="Member" />
+                        <Label layoutX="71.0" layoutY="202.0" text="Start Date" />
+                        <Label layoutX="116.0" layoutY="270.0" text="Page Number" />
+                        <Label layoutX="59.0" layoutY="335.0" text="Total Number of Pages" />
+                        <ComboBox fx:id="selectMemberCR" layoutX="136.0" layoutY="122.0" prefWidth="150.0" />
+                        <Label layoutX="56.0" layoutY="62.0" text="Create, delete or modify progress on selected Book">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="updateBtnCR" layoutX="289.0" layoutY="444.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="79.0" text="Update" />
+                        <Button fx:id="addBtnCR" layoutX="114.0" layoutY="444.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="Add" />
+                        <Button fx:id="deleteBtnCR" layoutX="201.0" layoutY="444.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="Delete" />
+                     </children>
+                  </AnchorPane>
+                  <Separator layoutX="606.0" layoutY="46.0" orientation="VERTICAL" prefHeight="757.0" prefWidth="0.0" />
+                  <Separator layoutX="619.0" layoutY="242.0" prefHeight="0.0" prefWidth="433.0" />
                </children></AnchorPane>
-            <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="840.0" prefWidth="1095.3333333333333" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-            <AnchorPane prefHeight="830.0" prefWidth="1085.3333333333333" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-            <AnchorPane layoutX="183.0" layoutY="77.0" prefHeight="830.0" prefWidth="1085.3333333333333" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <AnchorPane fx:id="recentlyReadTBRForm" layoutX="183.0" layoutY="77.0" prefHeight="830.0" prefWidth="1085.3333333333333" style="-fx-background-color: FAF9F6;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <VBox layoutX="198.0" layoutY="114.0" prefHeight="830.0" prefWidth="974.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
@@ -163,7 +207,7 @@
                         </Label>
                         <ScrollPane prefHeight="250.0" prefWidth="200.0" styleClass="transparent" stylesheets="@css/vibe.css">
                            <content>
-                              <HBox fx:id="readBooksLayout" alignment="CENTER_LEFT" prefHeight="233.0" prefWidth="1417.0" spacing="20.0" styleClass="transparent" stylesheets="@css/vibe.css">
+                              <HBox fx:id="readBooksLayout" alignment="CENTER_LEFT" prefHeight="233.0" prefWidth="1417.0" spacing="20.0" style="-fx-background-color: FAF9F6;" styleClass="transparent" stylesheets="@css/vibe.css">
                                  <padding>
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                  </padding>

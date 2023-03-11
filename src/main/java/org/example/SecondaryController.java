@@ -148,7 +148,7 @@ public class SecondaryController implements Initializable {
                     alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error Message");
                     alert.setHeaderText(null);
-                    alert.setContentText("Invalid password :3");
+                    alert.setContentText("Weak password");
                     alert.showAndWait();
                 } else {
                     prepare = connect.prepareStatement(sql);
@@ -209,10 +209,6 @@ public class SecondaryController implements Initializable {
             subSigninBtn.setVisible(false);
         });
 
-    }
-
-    public void close() {
-        javafx.application.Platform.exit();
     }
 
     @Override
